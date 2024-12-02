@@ -127,6 +127,8 @@ void move_piece(Board* board, Move* move) {
     piece_swap(board->state, move, islower(piece));
     if (board->history) {
         hist->last = board->history; 
+    } else {
+        board->start_of_history = hist;
     }
     board->history = hist;
 }

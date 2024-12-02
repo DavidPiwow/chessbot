@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-//#include "helper_functions.h"
-
 
 #define EMPTY ' '
 #define BOARD_SIZE 8 
@@ -20,7 +18,7 @@ struct _board {
     char* board_end;
 
     struct _board_state* state;
-
+    struct _move_history* start_of_history;
     struct _move_history* history;
 };
 

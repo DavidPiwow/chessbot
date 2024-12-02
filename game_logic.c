@@ -13,6 +13,7 @@ Board* create_board(void) {
 
     // set this to a null pointer for start of chain reasons
     temp->history = NULL;
+    temp->start_of_history = NULL;
 
     char pieces_u[16] = {'C', 'N', 'B', 'Q', 'K', 'B', 'N', 'C',
                          'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'};

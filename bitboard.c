@@ -22,14 +22,12 @@ void print_num(BITBOARD* board) {
     printf("\n");
 }
 
-
 // (SQUARE_COUNT - 1) because the first bit is set so we are one ahead
 // subtract by x to get to the right column position
 // subtract by y * row size to get to the correct row
 inline static BITBOARD make_mask(int x, int y) {
     return (uint64_t)1 << ((SQUARE_COUNT - 1 - x) - (BOARD_SIZE  * y));
 }
-
 
 // OUT: moves the original mask by x and y, be aware it CHANGES THE ORIGINAL MASK
 static void shift_mask(BITBOARD* original_mask, int x, int y) {
@@ -50,7 +48,6 @@ static void shift_mask(BITBOARD* original_mask, int x, int y) {
         *original_mask = *original_mask << y_shift;
     }
 }
-
 
 // start at x1 and make a mask of the steps between x1 to x2
 static BITBOARD create_move_mask(struct _move* move) {
