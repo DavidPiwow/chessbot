@@ -101,10 +101,10 @@ Move get_random_move(Board *board, int up) {
 
     MoveChoices choices = get_valid_moves(board, pos.x, pos.y);
     char piece = get_piece_at(board, pos.x, pos.y);
-
+    int tries = 0;
 
     
-    while (!choices.any || toupper(piece) == 'N' || toupper(piece) == 'P') {
+    while (!choices.any || toupper(piece) == 'N' || toupper(piece) == 'P' && tries++ <= 3) {
         if (toupper(piece) == 'N') {
             int tries = 0;
             Move mv = get_random_horse(board, pos.x, pos.y);
@@ -136,6 +136,8 @@ Move get_random_move(Board *board, int up) {
 
         piece = get_piece_at(board, pos.x, pos.y);
     }
+
+    if (tries > 3) return (Move){EMPTY, EMPTY, EMPTY, EMPTY};
     
     Move mv;
 
