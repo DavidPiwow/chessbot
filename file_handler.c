@@ -4,13 +4,12 @@ FILE* get_history_(int id) {
 
 }
 
-FILE* store_game(MoveHistory* move_history, int move_count) {
+FILE* store_game(MoveHistory* move_history) {
     FILE* to_return = fopen("chess.history","w");
     
-    for (int i = 0; i < move_count; i ++) {
-        if (!move_history) break; 
-        move_history.
-    }
+    char move[6]; 
 
+    
+    
     return to_return;
 }

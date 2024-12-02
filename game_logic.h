@@ -31,8 +31,10 @@ struct _coordinates {
 };
 
 struct _move_history {
-    struct _coordinates where;
+    struct _move* where;
+    char captured, piece;
     struct _move_history* last;
+    struct _move_history* next;
 };
 
 struct _move_choices {

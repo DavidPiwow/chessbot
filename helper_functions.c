@@ -55,7 +55,7 @@ int can_move_diagonal(char piece) {
 }
 
 
-MoveHistory* push_history(Move* move, MoveHistory* last) ;
+MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captured);
 MoveHistory* pop_history(MoveHistory* last);
 
 
@@ -120,10 +120,10 @@ void move_piece(Board* board, Move* move) {
     char* old_pos = board->grid + move->x1 + (move->y1*BOARD_SIZE);
     char* new_pos = board->grid + move->x2 + (move->y2*BOARD_SIZE);
     char piece = get_piece_at(board, move->x1, move->y1);
-
+    char capture = get_piece_at(board, move->x2, move->y2);
     *new_pos = piece;
     *old_pos = EMPTY;
-    MoveHistory* hist = push_history(move, board->history);
+    MoveHistory* hist = push_history(move, board->history, piece, capture);
     piece_swap(board->state, move, islower(piece));
     if (board->history) {
         hist->last = board->history; 
@@ -132,13 +132,16 @@ void move_piece(Board* board, Move* move) {
     }
     board->history = hist;
 }
-MoveHistory* push_history(Move* move, MoveHistory* last) {
+MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captured) {
     MoveHistory* mv = (MoveHistory*)malloc(sizeof(MoveHistory));
     if (!mv) {
         return NULL;
     }
-    mv->where = (Coordinates){move->x2, move->y2};
+    mv->piece = piece;
+    mv->captured = captured;
+    mv->where = move;
     mv->last = last;
+    last->next = mv;
     return mv;
 }
 

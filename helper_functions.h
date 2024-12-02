@@ -29,7 +29,7 @@ int out_of_bounds(Move* move);
 int is_same_team(char piece, char piece2);
 
 //MoveChoices get_coords(Board* board);
-MoveHistory* push_history(Move* move, MoveHistory* last);
+MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captured);
 MoveHistory* pop_history(MoveHistory* last);
 
 int get_piece_number(char piece);
