@@ -1,0 +1,9 @@
+/bitboard.o
+/chess
+/display.o
+/game_logic.o
+/helper_functions.o
+/main_loop.o
+/print_functions.o
+/random_bot.o
+/think.o
