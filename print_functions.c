@@ -41,15 +41,6 @@ void print_board(Board* board) {
     xl = yl =  _x =  _y = -1;
     x = y = 0;
 
-    if (board->history) {
-        MoveHistory* last = board->history;
-        xl = last->where.x;
-        yl = last->where.y;
-        if (last->last) {
-           _x = last->last->where.x;
-           _y = last->last->where.y;
-        }
-    }
     
     while (cur_pos != board->board_end) {
         if (is_special(x, y, xl, yl) || is_special(x, y, _x, _y)) {

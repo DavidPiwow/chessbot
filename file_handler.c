@@ -13,3 +13,11 @@ FILE* store_game(MoveHistory* move_history) {
     
     return to_return;
 }
+
+int store_move(FILE* game_log, MoveHistory* move) {
+    if (!game_log || !move) return 1;
+
+    char move_string[10]; 
+
+    return 0;
+}

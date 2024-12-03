@@ -123,14 +123,14 @@ void move_piece(Board* board, Move* move) {
     char capture = get_piece_at(board, move->x2, move->y2);
     *new_pos = piece;
     *old_pos = EMPTY;
-    MoveHistory* hist = push_history(move, board->history, piece, capture);
+   // MoveHistory* hist = push_history(move, board->history, piece, capture);
     piece_swap(board->state, move, islower(piece));
-    if (board->history) {
+   /* if (board->history) {
         hist->last = board->history; 
     } else {
         board->start_of_history = hist;
     }
-    board->history = hist;
+    board->history = hist;*/
 }
 MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captured) {
     MoveHistory* mv = (MoveHistory*)malloc(sizeof(MoveHistory));

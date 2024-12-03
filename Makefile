@@ -4,7 +4,7 @@ CFLAGS = -g -Wall -Wextra
 
 # Define the target executable and source files
 TARGET = chess
-SRC = game_logic.c bitboard.c random_bot.c helper_functions.c print_functions.c main_loop.c think.c display.c
+SRC = game_logic.c bitboard.c random_bot.c helper_functions.c print_functions.c main_loop.c display.c
 
 # Default rule to build the executable
 all: $(TARGET)
