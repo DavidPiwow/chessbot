@@ -1,4 +1,5 @@
 #include "game_logic.h"
+#include "helper_functions.h"
 #include "bitboard.h"
 
 static inline int bad_coords(int x, int y) {
@@ -55,9 +56,6 @@ int can_move_diagonal(char piece) {
 }
 
 
-MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captured);
-MoveHistory* pop_history(MoveHistory* last);
-
 
 int correct_direction(Move* move, char piece) {
     if (!move || (move->dx == 0 && move->dy == 0)) return 0;
@@ -97,17 +95,20 @@ int piece_score(char piece) {
     switch (piece)
     {
     case 'P':
-        return 1;
+        return 10;
         break;
     case 'N':
-        return 2;
+        return 11;
         break;
     case 'B':
     case 'C':
-        return 3;
+        return 12;
         break;
     case 'Q':
-        return 4;
+        return 13;
+        break;
+    case 'K':
+        return 100;
         break;
     default:
         break;
@@ -116,23 +117,28 @@ int piece_score(char piece) {
 }
 
 
-void move_piece(Board* board, Move* move) {
+MoveHistory* move_piece(Board* board, Move* move) {
     char* old_pos = board->grid + move->x1 + (move->y1*BOARD_SIZE);
     char* new_pos = board->grid + move->x2 + (move->y2*BOARD_SIZE);
+
     char piece = get_piece_at(board, move->x1, move->y1);
     char capture = get_piece_at(board, move->x2, move->y2);
+
     *new_pos = piece;
     *old_pos = EMPTY;
-   // MoveHistory* hist = push_history(move, board->history, piece, capture);
+
+    MoveHistory* hist = push_history(move, piece, capture);
     piece_swap(board->state, move, islower(piece));
-   /* if (board->history) {
+    if (board->history != NULL) {
         hist->last = board->history; 
-    } else {
-        board->start_of_history = hist;
-    }
-    board->history = hist;*/
+    } 
+    
+    board->history = hist;
+
+    return hist;
 }
-MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captured) {
+
+MoveHistory* push_history(Move* move, char piece, char captured) {
     MoveHistory* mv = (MoveHistory*)malloc(sizeof(MoveHistory));
     if (!mv) {
         return NULL;
@@ -140,8 +146,8 @@ MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captur
     mv->piece = piece;
     mv->captured = captured;
     mv->where = move;
-    mv->last = last;
-    last->next = mv;
+    mv->last = NULL;
+    
     return mv;
 }
 
@@ -153,10 +159,12 @@ MoveHistory* pop_history(MoveHistory* last) {
 }
 
 void free_history(MoveHistory* history) {
-    while (history) {
-        MoveHistory* temp = history;
-        history = history->last;
-        free(temp);
+    MoveHistory* cur = history;
+    MoveHistory* prev = NULL;
+    while (cur != NULL) {
+        prev = cur;
+        cur = cur->last;
+        free(prev);
     }
 }
 
@@ -171,4 +179,35 @@ int num_from_char(char c) {
         return c- 'a';
     }
     return EMPTY;
+}
+
+Coordinates* get_coordinates(Board* board, int up) {
+    Coordinates *positions = malloc(sizeof(Coordinates) * 17);
+    if (!positions) {
+        printf("FAIL");
+        return NULL;
+    }
+
+    int pos_count = 0;
+    char piece;
+
+    for (int y = 0; y < BOARD_SIZE; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            if (pos_count >= 16) 
+                break;
+
+            piece = get_piece_at(board, x, y);
+
+            if (piece == EMPTY) 
+                continue;
+
+            if ((up && !isupper(piece)) || (!up && !islower(piece)))
+                continue;
+
+            positions[pos_count] = (Coordinates){x, y};
+            pos_count++;
+        }
+    }
+
+    return positions;
 }

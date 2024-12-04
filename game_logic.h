@@ -13,15 +13,6 @@
 
 typedef uint64_t BITBOARD;
 
-struct _board {
-    char grid[BOARD_SIZE * BOARD_SIZE];
-    char* board_end;
-
-    struct _board_state* state;
-    struct _move_history* start_of_history;
-    struct _move_history* history;
-};
-
 struct _move {
 	int x1,x2,y1,y2,dx,dy;
 };
@@ -34,12 +25,23 @@ struct _move_history {
     struct _move* where;
     char captured, piece;
     struct _move_history* last;
-    struct _move_history* next;
 };
 
 struct _move_choices {
     int x,y,d_u, d_d, d_l, d_r, d_pu,d_pd, d_nu, d_nd, any;
 };
+
+
+struct _board {
+    char grid[BOARD_SIZE * BOARD_SIZE];
+    char* board_end;
+    struct _board_state* state;
+    struct _move_history* history;
+
+    struct _coordinates* lower_pieces;
+    struct _coordinates* upper_pieces;
+};
+
 
 typedef struct _move Move;
 typedef struct _coordinates Coordinates;

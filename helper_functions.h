@@ -15,7 +15,8 @@
 int correct_direction(Move* move, char piece);
 
 
-void move_piece(Board* board, Move* move);
+
+MoveHistory* move_piece(Board* board, Move* move);
 char get_piece_at(Board* board, int x, int y);
 
 int piece_score(char piece);
@@ -29,11 +30,12 @@ int out_of_bounds(Move* move);
 int is_same_team(char piece, char piece2);
 
 //MoveChoices get_coords(Board* board);
-MoveHistory* push_history(Move* move, MoveHistory* last, char piece, char captured);
+MoveHistory* push_history(Move* move, char piece, char captured);
 MoveHistory* pop_history(MoveHistory* last);
 
 int get_piece_number(char piece);
 void free_history(MoveHistory* history);
+Coordinates* get_coordinates(Board* board, int up);
 
 
 #endif

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "game_logic.h": "c"
+    }
+}

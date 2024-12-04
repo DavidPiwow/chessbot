@@ -1,5 +1,4 @@
 #include "helper_functions.h"
-
 Board* create_board(void) {
     Board *temp = (Board *)malloc(sizeof(Board));
     if (!temp) {
@@ -13,7 +12,6 @@ Board* create_board(void) {
 
     // set this to a null pointer for start of chain reasons
     temp->history = NULL;
-    temp->start_of_history = NULL;
 
     char pieces_u[16] = {'C', 'N', 'B', 'Q', 'K', 'B', 'N', 'C',
                          'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'};
@@ -26,7 +24,6 @@ Board* create_board(void) {
     memcpy(board_start, pieces_u, sizeof(pieces_u));
     memcpy(temp->board_end - (BOARD_SIZE * 2), pieces_l, sizeof(pieces_l));
 
-
     BITBOARD black_pieces = (uint64_t)(0xFFFF) << (64 - 16);
     BITBOARD white_pieces = (uint64_t)(0xFFFF);
 
@@ -36,15 +33,17 @@ Board* create_board(void) {
         temp->state->white = white_pieces;
         temp->state->black = black_pieces;
     }
-
+    temp->lower_pieces = get_coordinates(temp, 0);
+    temp->upper_pieces = get_coordinates(temp, 1);
     return temp;
 }
 
 void free_board(Board* board) {
     if (board) {
-        if (board->state) 
-            free(board->state);
+        if (board->state) free(board->state);
         if (board->history) free_history(board->history);
+        if (board->upper_pieces) free(board->upper_pieces);
+        if (board->lower_pieces) free(board->lower_pieces);
     }
 
     free(board);
