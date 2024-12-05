@@ -116,14 +116,26 @@ int piece_score(char piece) {
     return 0;
 }
 
+Coordinates* find_piece(Coordinates* coords, int x, int y) {
+    for (int i = 0; i <= PIECE_COUNT; i++) {
+        if (!coords) break;
+        if (coords->x == x && coords->y == y) return coords;
+        coords++;
+    }
+    return NULL;
+}
 
 MoveHistory* move_piece(Board* board, Move* move) {
     char* old_pos = board->grid + move->x1 + (move->y1*BOARD_SIZE);
     char* new_pos = board->grid + move->x2 + (move->y2*BOARD_SIZE);
 
     char piece = get_piece_at(board, move->x1, move->y1);
+    Coordinates* piece_cache = isupper(piece) ? board->upper_pieces : board->lower_pieces;
+    Coordinates* enemy_cache = isupper(piece) ? board->lower_pieces : board->upper_pieces;
     char capture = get_piece_at(board, move->x2, move->y2);
-
+    if (enemy_cache) enemy_cache->x = enemy_cache->y = EMPTY;
+    piece_cache->x = move->x2;
+    piece_cache->y = move->y2;
     *new_pos = piece;
     *old_pos = EMPTY;
 
@@ -166,6 +178,8 @@ void free_history(MoveHistory* history) {
         cur = cur->last;
         free(prev);
     }
+    cur = NULL;
+    prev = NULL;
 }
 
 int num_from_char(char c) {

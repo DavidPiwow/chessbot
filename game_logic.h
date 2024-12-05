@@ -10,6 +10,7 @@
 #define EMPTY ' '
 #define BOARD_SIZE 8 
 #define SQUARE_COUNT BOARD_SIZE * BOARD_SIZE
+#define PIECE_COUNT 16
 
 typedef uint64_t BITBOARD;
 

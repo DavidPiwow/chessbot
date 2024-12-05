@@ -34,7 +34,11 @@ void close_app(App* app) {
 	if (app->surface) SDL_FreeSurface(app->surface);
 	if(app->renderer) SDL_DestroyRenderer(app->renderer);
 	if (app->window) SDL_DestroyWindow(app->window);
+	app->surface = NULL;
+	app->renderer = NULL;
+	app->window = NULL;
 	free(app);
+	app = NULL;
 }
 
 void draw_board(Board* board, App* app, SDL_Texture* image) {

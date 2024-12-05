@@ -8,42 +8,21 @@ static inline int choose_random(int i1, int i2) {
 
 
 Coordinates get_ran_pos(Board *board, int up) {
-    Coordinates *positions = malloc(sizeof(Coordinates) * 17);
+    Coordinates* positions = up ? board->upper_pieces : board->lower_pieces;
     if (!positions) {
         printf("FAIL");
         return ((Coordinates) { EMPTY, EMPTY });
     }
+    
 
-    int pos_count = 0;
-    char piece;
-
-    for (int y = 0; y < BOARD_SIZE; y++) {
-        for (int x = 0; x < BOARD_SIZE; x++) {
-            if (pos_count >= 16) 
-                break;
-
-            piece = get_piece_at(board, x, y);
-
-            if (piece == EMPTY) 
-                continue;
-
-
-            if ((up && !isupper(piece)) || (!up && !islower(piece)))
-                continue;
-
-            positions[pos_count] = (Coordinates){x, y};
-            pos_count++;
-        }
-    }
-
-    int pos = rand() % (pos_count);
-    pos = pos > pos_count ? pos_count : pos;
     int x,y;
+    int pos = rand() % (PIECE_COUNT);
+    pos = pos > PIECE_COUNT ? PIECE_COUNT : pos;
+    while (positions[pos].x == EMPTY) pos = rand() % (PIECE_COUNT);
     x = positions[pos].x;
     y = positions[pos].y;
+
     Coordinates c = {x, y};
-    free(positions);
-    
     return c;
 }
 

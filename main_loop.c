@@ -56,7 +56,7 @@ int main(int argc, char* args[])
         if (attempts >= 4) quit = 1;
         store_move(store,move_piece(game_board, &mv) );
         //print_board(game_board);
-        SDL_Delay(1000);
+        SDL_Delay(100);
         i++;
     }
 
@@ -64,6 +64,11 @@ int main(int argc, char* args[])
     SDL_DestroyTexture(piece_sprites);
     free_board(game_board);
     close_app(app);
+    store = NULL;
+    game_board = NULL;
+    piece_sprites = NULL;
+    app = NULL;
+    
     SDL_Quit();
 
     return 0;
