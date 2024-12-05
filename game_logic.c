@@ -13,10 +13,10 @@ Board* create_board(void) {
     // set this to a null pointer for start of chain reasons
     temp->history = NULL;
 
-    char pieces_u[16] = {'C', 'N', 'B', 'Q', 'K', 'B', 'N', 'C',
+    char pieces_u[16] = {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
                          'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'};
     char pieces_l[16] = {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
-                         'c', 'n', 'b', 'q', 'k', 'b', 'n', 'c'};
+                         'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'};
 
 
     // copy the above arrays into memory and set the rest to chosen EMPTY char
@@ -197,12 +197,12 @@ Coordinates get_horse_move(Board* board, int x1, int y1) {
         mv.dx = x_list[i];
         mv.dy = y_list[i];
         if (!verify_move(board, &mv)) {
-            x_list[i] = 0;
-            y_list[i] = 0;
+            x_list[i] = EMPTY;
+            y_list[i] = EMPTY;
         }
     }
     for (; p < 8; p++) {
-        if (x_list[p] != 0) {
+        if (x_list[p] != EMPTY) {
             horse_choice = p;
         }
     }

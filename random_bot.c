@@ -37,8 +37,8 @@ Move get_random_horse(Board *board, int x, int y) {
 
 Move get_random_pawn(Board *board, int x, int y)
 {
-    int dy, rx, ry;
-    dy = rx = ry = 0;
+    int dy, rx;
+    dy = rx = 0;
     char p = get_piece_at(board, x, y);
 
     if ((islower(p) && y == 6) || (isupper(p) && y == 1))
@@ -50,28 +50,19 @@ Move get_random_pawn(Board *board, int x, int y)
         dy *= -1;
     }
     
-    ry = y + dy;
-
-    char goal = get_piece_at(board, x + 1,ry);
+    char goal = get_piece_at(board, x + 1,y + dy);
     if (goal != EMPTY && !is_same_team(p, goal)) {
         rx = 1;
     }
-    goal = get_piece_at(board, x - 1,ry);
+    goal = get_piece_at(board, x - 1,y + dy);
     if (goal != EMPTY && !is_same_team(p, goal)) {
-        rx = choose_random(rx, -1);
+        rx = -1;
     }
 
     Move mv;
 
-    if ((rx > BOARD_SIZE - 1 || rx < 0) ||
-        (ry > BOARD_SIZE - 1 || ry < 0) ||
-        (is_same_team(get_piece_at(board, x, y), get_piece_at(board, rx, ry)))) 
-    {
-        mv = (Move){0, 0, 0, 0, 0, 0};
-    } else {
-        mv = (Move){x, x + rx, y, ry, rx, dy};
-    }
-
+        mv = (Move){x, x + rx, y, y + dy, rx, dy};
+    
     return mv;
 }
 
@@ -79,30 +70,30 @@ Move get_random_move(Board *board, int up) {
     Coordinates pos = get_ran_pos(board, up);
 
     MoveChoices choices = get_valid_moves(board, pos.x, pos.y);
+    while (!choices.any) {
+        pos = get_ran_pos(board, up);
+        choices = get_valid_moves(board, pos.x, pos.y);
+    }
     char piece = get_piece_at(board, pos.x, pos.y);
     int tries = 0;
 
     
-    while ((!choices.any || toupper(piece) == 'N' || toupper(piece) == 'P') && (tries++ <= 3)) {
+    while ((!choices.any || toupper(piece) == 'N' || toupper(piece) == 'P') && (tries++ <= 8)) {
         if (toupper(piece) == 'N') {
-            int tries = 0;
             Move mv = get_random_horse(board, pos.x, pos.y);
 
             while (!verify_move(board, &mv) && tries < 8) {
                 mv = get_random_horse(board, pos.x, pos.y);
-                tries++;
             } if (verify_move(board, &mv)) {
                 return mv;
             } else {
                 choices.any = 0;
             }
         } else if (toupper(piece) == 'P') {
-            int tries = 0;
             Move mv = get_random_pawn(board, pos.x, pos.y);
 
             while (!verify_move(board, &mv) && tries < 8) {
                 mv = get_random_pawn(board, pos.x, pos.y);
-                tries++;
             } if (verify_move(board, &mv)) {
                 return mv;
             } else {
@@ -116,7 +107,7 @@ Move get_random_move(Board *board, int up) {
         piece = get_piece_at(board, pos.x, pos.y);
     }
 
-    if (tries > 3) return (Move){EMPTY, EMPTY, EMPTY, EMPTY,0,0};
+    if (tries > 8) return (Move){EMPTY, EMPTY, EMPTY, EMPTY,0,0};
     
     Move mv;
 

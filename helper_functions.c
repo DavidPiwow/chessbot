@@ -28,7 +28,7 @@ int get_piece_number(char piece) {
     case 'N':
         to_return = 3;
         break;
-    case 'C':
+    case 'R':
         to_return = 4;
         break;
     case 'P':
@@ -44,11 +44,11 @@ int get_piece_number(char piece) {
 }
 
 int can_move_vertical(char piece) {
-    return (toupper(piece) == 'C' || toupper(piece) == 'P' || toupper(piece) == 'K' || toupper(piece) == 'Q');
+    return (toupper(piece) == 'R' || toupper(piece) == 'P' || toupper(piece) == 'K' || toupper(piece) == 'Q');
 }
 
 int can_move_horizontal(char piece) {
-    return (toupper(piece) == 'C' || toupper(piece) == 'K' || toupper(piece) == 'Q');
+    return (toupper(piece) == 'R' || toupper(piece) == 'K' || toupper(piece) == 'Q');
 }
 
 int can_move_diagonal(char piece) {
@@ -101,7 +101,7 @@ int piece_score(char piece) {
         return 11;
         break;
     case 'B':
-    case 'C':
+    case 'R':
         return 12;
         break;
     case 'Q':
@@ -132,7 +132,10 @@ MoveHistory* move_piece(Board* board, Move* move) {
     char piece = get_piece_at(board, move->x1, move->y1);
     Coordinates* piece_cache = isupper(piece) ? board->upper_pieces : board->lower_pieces;
     Coordinates* enemy_cache = isupper(piece) ? board->lower_pieces : board->upper_pieces;
+
+    piece_cache = find_piece(piece_cache, move->x1, move->y1);
     char capture = get_piece_at(board, move->x2, move->y2);
+    enemy_cache = find_piece(piece_cache, move->x2, move->y2);
     if (enemy_cache) enemy_cache->x = enemy_cache->y = EMPTY;
     piece_cache->x = move->x2;
     piece_cache->y = move->y2;

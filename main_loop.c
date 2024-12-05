@@ -28,7 +28,9 @@ int main(int argc, char* args[])
     
     int quit = 0;
     int attempts = 0;
-    while (!quit && (game_board->state->white != 0 && game_board->state->black != 0)){
+    int round = 1;
+    while (!quit){
+        attempts = 0;
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
                 quit = 1;
@@ -54,12 +56,13 @@ int main(int argc, char* args[])
         while (!verify_move(game_board, &mv) && attempts++ < 4)
             mv = get_random_move(game_board, i % 2 == 1);
         if (attempts >= 4) quit = 1;
-        store_move(store,move_piece(game_board, &mv) );
+        store_move(store,move_piece(game_board, &mv), i, round);
         //print_board(game_board);
-        SDL_Delay(100);
+        SDL_Delay(10);
+        if (i % 2 == 1) round++;
         i++;
     }
-
+    print_board(game_board);
     fclose(store);
     SDL_DestroyTexture(piece_sprites);
     free_board(game_board);
