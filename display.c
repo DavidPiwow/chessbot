@@ -1,6 +1,6 @@
 #include "display.h"
 #include "helper_functions.h"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 #include <string.h>
 // 45 pixels for the piece sprites!!
 #define IMAGE_SIZE 45
@@ -83,7 +83,7 @@ void draw_board(Board* board, App* app, SDL_Texture* image) {
 SDL_Texture* load_image(App* app) {
 	SDL_Texture* to_return = NULL;
 
-	SDL_Surface* image_surface = IMG_Load("/home/david/Desktop/cgame/chess_pieces.png");
+	SDL_Surface* image_surface = IMG_Load("C:\\Users\\david\\cheese\\chessbot\\chess_pieces.png");
 
 	to_return = SDL_CreateTextureFromSurface(app->renderer, image_surface);
 

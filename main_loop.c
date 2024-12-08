@@ -7,26 +7,22 @@
 
 int main(int argc, char* args[])
 {
-
-
     //if (argc || args) printf("ok");
     if (SDL_Init(SDL_INIT_VIDEO) > 0) printf("FAIL");
     // initialize random and game board
     srand((unsigned int)time(NULL)); 
     
     Board* game_board = create_board();
-
     FILE* store = fopen("chess_history.txt","w");
-    if (!game_board) return 0;
-   // BITBOARD white_state = game_board->state ->white;
-    App* app = open_app(SCREEN_SIZE, SCREEN_SIZE);
 
-    int i = 0;
-   
+    if (!game_board || !store) return 0;
+    
+    App* app = open_app(SCREEN_SIZE, SCREEN_SIZE);
     SDL_Texture* piece_sprites = load_image(app);
    // print_board(game_board);
-    
     SDL_Event e; 
+    
+    int i = 0;
     
     int quit = 0;
     int attempts = 0;
@@ -59,7 +55,7 @@ int main(int argc, char* args[])
             mv = get_random_move(game_board, i % 2 == 1);
 
         if (attempts >= 4) quit = 1;
-        
+
         store_move(store,move_piece(game_board, &mv), i, round);
         //print_board(game_board);
         SDL_Delay(10);

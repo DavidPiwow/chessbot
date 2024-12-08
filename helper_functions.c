@@ -126,6 +126,9 @@ Coordinates* find_piece(Coordinates* coords, int x, int y) {
 }
 
 MoveHistory* move_piece(Board* board, Move* move) {
+
+    char* old_pos = board->grid + move->x1 + (move->y1 * BOARD_SIZE);
+    char* new_pos = board->grid + move->x2 + (move->y2 * BOARD_SIZE);
     char piece = get_piece_at(board, move->x1, move->y1);
 
     Coordinates* piece_cache = isupper(piece) ? board->upper_pieces : board->lower_pieces;
@@ -144,6 +147,9 @@ MoveHistory* move_piece(Board* board, Move* move) {
 
     piece_cache->x = move->x2;
     piece_cache->y = move->y2;
+
+    *new_pos = piece;
+    *old_pos = EMPTY;
 
     MoveHistory* hist = push_history(move, piece, capture);
     piece_swap(board->state, move, islower(piece));

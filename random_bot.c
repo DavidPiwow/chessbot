@@ -14,11 +14,12 @@ Coordinates get_ran_pos(Board *board, int up) {
         return ((Coordinates) { EMPTY, EMPTY });
     }
     
-
     int x,y;
     int pos = rand() % (PIECE_COUNT);
     pos = pos > PIECE_COUNT ? PIECE_COUNT : pos;
+
     while (positions[pos].x == EMPTY) pos = rand() % (PIECE_COUNT);
+    
     x = positions[pos].x;
     y = positions[pos].y;
 

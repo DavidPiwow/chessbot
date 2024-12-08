@@ -3,7 +3,9 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "C:/vclibs/SDL2-2.30.9/include/",
+                "C:/vclibs/SDL_Image/SDL2_image-2.8.2/include"
             ],
             "defines": [
                 "_DEBUG",
