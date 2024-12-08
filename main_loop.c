@@ -7,6 +7,8 @@
 
 int main(int argc, char* args[])
 {
+
+
     //if (argc || args) printf("ok");
     if (SDL_Init(SDL_INIT_VIDEO) > 0) printf("FAIL");
     // initialize random and game board
@@ -30,7 +32,6 @@ int main(int argc, char* args[])
     int attempts = 0;
     int round = 1;
     while (!quit){
-        attempts = 0;
         while (SDL_PollEvent(&e)){
             if (e.type == SDL_QUIT){
                 quit = 1;
@@ -43,7 +44,6 @@ int main(int argc, char* args[])
             }
         }
 
-
         SDL_RenderClear(app->renderer);
         draw_board(game_board, app, piece_sprites);
         //SDL_RenderDrawRect(app->renderer, &r);
@@ -52,7 +52,7 @@ int main(int argc, char* args[])
         SDL_SetRenderDrawColor(app->renderer, 15, 4, 26, 255);
 
         Move mv = get_random_move(game_board, i % 2 == 1);
-
+        print_board(game_board);
         while (!verify_move(game_board, &mv) && attempts++ < 4)
             mv = get_random_move(game_board, i % 2 == 1);
         if (attempts >= 4) quit = 1;
