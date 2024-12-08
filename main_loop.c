@@ -52,10 +52,14 @@ int main(int argc, char* args[])
         SDL_SetRenderDrawColor(app->renderer, 15, 4, 26, 255);
 
         Move mv = get_random_move(game_board, i % 2 == 1);
+
         print_board(game_board);
+
         while (!verify_move(game_board, &mv) && attempts++ < 4)
             mv = get_random_move(game_board, i % 2 == 1);
+
         if (attempts >= 4) quit = 1;
+        
         store_move(store,move_piece(game_board, &mv), i, round);
         //print_board(game_board);
         SDL_Delay(10);

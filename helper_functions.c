@@ -77,7 +77,7 @@ int correct_direction(Move* move, char piece) {
 // u better be on the board >:(( and REALLLLL
 int out_of_bounds(Move* move) {
         return bad_coords(move->x1, move->y1) ||(bad_coords(move->x2, move->y2)) 
-            || (move->dx == 0 && move->dy == 0) || abs(move->dx) > BOARD_SIZE || abs(move->dy > BOARD_SIZE);
+            || (move->dx == 0 && move->dy == 0) || abs(move->dx) > BOARD_SIZE || abs(move->dy) > BOARD_SIZE;
 }
 
 
