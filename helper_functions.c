@@ -77,7 +77,7 @@ int correct_direction(Move* move, char piece) {
 // u better be on the board >:(( and REALLLLL
 int out_of_bounds(Move* move) {
         return bad_coords(move->x1, move->y1) ||(bad_coords(move->x2, move->y2)) 
-            || (move->dx == 0 && move->dy == 0);
+            || (move->dx == 0 && move->dy == 0) || abs(move->dx) > BOARD_SIZE || abs(move->dy > BOARD_SIZE);
 }
 
 
@@ -126,21 +126,24 @@ Coordinates* find_piece(Coordinates* coords, int x, int y) {
 }
 
 MoveHistory* move_piece(Board* board, Move* move) {
-    char* old_pos = board->grid + move->x1 + (move->y1*BOARD_SIZE);
-    char* new_pos = board->grid + move->x2 + (move->y2*BOARD_SIZE);
-
     char piece = get_piece_at(board, move->x1, move->y1);
+
     Coordinates* piece_cache = isupper(piece) ? board->upper_pieces : board->lower_pieces;
     Coordinates* enemy_cache = isupper(piece) ? board->lower_pieces : board->upper_pieces;
 
     piece_cache = find_piece(piece_cache, move->x1, move->y1);
+
     char capture = get_piece_at(board, move->x2, move->y2);
+
     enemy_cache = find_piece(piece_cache, move->x2, move->y2);
-    if (enemy_cache) enemy_cache->x = enemy_cache->y = EMPTY;
+
+    if (enemy_cache) {
+        enemy_cache->x = EMPTY;
+        enemy_cache->y = EMPTY;
+    }
+
     piece_cache->x = move->x2;
     piece_cache->y = move->y2;
-    *new_pos = piece;
-    *old_pos = EMPTY;
 
     MoveHistory* hist = push_history(move, piece, capture);
     piece_swap(board->state, move, islower(piece));
