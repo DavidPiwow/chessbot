@@ -3,7 +3,7 @@
 
     
 
-int store_move(FILE* game_log, MoveHistory* move, int num, int turn) {
+char store_move(FILE* game_log, MoveHistory* move, int num, int turn) {
     if (!game_log || !move) return 1;
 
     if (num%2 == 0) 
@@ -20,5 +20,7 @@ int store_move(FILE* game_log, MoveHistory* move, int num, int turn) {
         else 
             fprintf(game_log, "%c%c%c\n", toupper(move->piece),
                 'a' + move->where->x2, BOARD_SIZE - (move->where->y2) + '0');
+
+    if (toupper(move->captured) == 'K') return 'K';
     return 0;
 }

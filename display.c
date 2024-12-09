@@ -1,9 +1,11 @@
 #include "display.h"
 #include "helper_functions.h"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 #include <string.h>
 // 45 pixels for the piece sprites!!
 #define IMAGE_SIZE 45
+
+#define IMAGELINK "C:\\Users\\david\\source\\repos\\chessupdate\\chess_pieces.png"
 
 App* open_app(int size_x, int size_y) {
 	App* app = calloc(1, sizeof(App));
@@ -46,8 +48,6 @@ void draw_board(Board* board, App* app, SDL_Texture* image) {
 
 	int c = 0;
 
-	int margin = SQUARE_SIZE/2 ;
-	int size = (SCREEN_SIZE - margin * 2) / BOARD_SIZE;
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
 			if (c % 2 == 0) {
@@ -58,17 +58,17 @@ void draw_board(Board* board, App* app, SDL_Texture* image) {
 
 				SDL_SetRenderDrawColor(app->renderer, 48, 34, 62, 255);
 			}
-			x = j * (size)+margin;
-			y = i * (size)+margin;
+			x = j * (DISP_SQUARE_SIZE)+MARGIN;
+			y = i * (DISP_SQUARE_SIZE)+MARGIN;
 
 			char piece = get_piece_at(board, j, i);
-			SDL_Rect square = { x, y, size, size };
+			SDL_Rect square = { x, y, DISP_SQUARE_SIZE, DISP_SQUARE_SIZE };
 			SDL_RenderFillRect(app->renderer, &square);
 
 			if (piece != EMPTY) {
 				int piece_number = get_piece_number(piece);
-				square.x += (size - IMAGE_SIZE)/2;
-				square.y += (size - IMAGE_SIZE) / 2;
+				square.x += (DISP_SQUARE_SIZE - IMAGE_SIZE)/2;
+				square.y += (DISP_SQUARE_SIZE - IMAGE_SIZE) / 2;
 				square.w = IMAGE_SIZE;
 				square.h = IMAGE_SIZE;
 				load_sprite(app, image, &square, piece_number);
@@ -84,7 +84,7 @@ void draw_board(Board* board, App* app, SDL_Texture* image) {
 SDL_Texture* load_image(App* app) {
 	SDL_Texture* to_return = NULL;
 
-	SDL_Surface* image_surface = IMG_Load("/home/david/Desktop/cgame/chess_pieces.png");
+	SDL_Surface* image_surface = IMG_Load(IMAGELINK);
 
 	to_return = SDL_CreateTextureFromSurface(app->renderer, image_surface);
 
@@ -104,3 +104,5 @@ void load_sprite(App* app, SDL_Texture* texture, SDL_Rect* where, int piece_numb
 	
 	SDL_RenderCopy(app->renderer, texture, &sprite_clip, where);
 }
+
+

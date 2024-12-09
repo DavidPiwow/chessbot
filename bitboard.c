@@ -70,6 +70,7 @@ static BITBOARD create_move_mask(struct _move* move) {
         shift_mask(&copy, dx, dy);
         mask = mask | copy;
     }
+
     return mask;
 }
 

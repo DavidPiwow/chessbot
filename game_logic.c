@@ -98,7 +98,9 @@ int verify_horse(Move* move) {
     // pieces between do not matter
     // horses can move 2 in one direction and 1 in the other
     if (abs(move->dx) == 2) {
-        if (abs(move->dy) != 1) return 0;
+        if (abs(move->dy) != 1) {
+            return 0;
+        }
     }
     else if (abs(move->dy) == 2) {
         if (abs(move->dx) != 1) return 0;
@@ -119,19 +121,26 @@ int verify_move(Board* board, Move* move) {
 
     // check if pawn, knight, or wrong direction
     if (toupper(piece) == 'P') {
-        if (! verify_pawn(board, move)) return 0;
+        if (!verify_pawn(board, move)) {
+            return 0;
+        }
     }
     else if (toupper(piece) == 'N') {
-        if (! verify_horse(move)) return 0;
+        return verify_horse(move);
     }
     else if (!correct_direction(move, piece)) {
         return 0;
     }
 
+
+
     // King can only move one piece at a time (save castling but thats not in here rn xx)
     if (toupper(piece) == 'K') {
-        if (abs(move->dx) > 1 || abs(move->dy) > 1) return 0;
+        if (abs(move->dx) > 1 || abs(move->dy) > 1) {
+            return 0;
+        }
     }
+
 
     // return if it is empty between or not
     return  attempt_move(board->state, move, islower(piece));

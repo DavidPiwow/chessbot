@@ -67,7 +67,7 @@ int correct_direction(Move* move, char piece) {
     else if ((move->dx != 0 && move->dy == 0) && can_move_horizontal(piece)) {
         return 1;
     }
-    else if ((move->dx == move->dy) && can_move_diagonal(piece)) {
+    else if ((abs(move->dx) == abs(move->dy)) && can_move_diagonal(piece)) {
         return 1;
     }
 

@@ -31,6 +31,7 @@ int main(int argc, char* args[])
 
     SDL_SetRenderDrawColor(app->renderer, 0,0,0, 255);
     int lower_turn = 1;
+    UserMove input = { -1,-1,-1,-1};
     while (!quit && round <= 30){
         SDL_RenderClear(app->renderer);
         draw_board(game_board, app, piece_sprites);
@@ -41,45 +42,96 @@ int main(int argc, char* args[])
             if (e.type == SDL_QUIT){
                 quit = 1;
             }
-            if (e.type == SDL_KEYDOWN){
 
-                SDL_RenderClear(app->renderer);
-                draw_board(game_board, app, piece_sprites);
-                //SDL_RenderDrawRect(app->renderer, &r);
+            if (e.type == SDL_MOUSEBUTTONDOWN && lower_turn) {
+                int x = e.button.x;
+                int y = e.button.y;
+                x -= MARGIN;
+                y -= MARGIN;
+                x /= DISP_SQUARE_SIZE;
+                y /= DISP_SQUARE_SIZE;
+                if (input.x1 == -1) {
+                    input.x1 = x;
+                    input.y1 = y;
+                }
+                else if (input.x2 == -1) {
+                    input.x2 = x;
+                    input.y2 = y;
 
-                SDL_RenderPresent(app->renderer);
+
+                    Move user_move = { input.x1, input.x2, 
+                                    input.y1, input.y2, 
+                                    input.x2 - input.x1, input.y2 - input.y1 };
+                    if (verify_move(game_board, &user_move)) {
+
+                        printf("%d %d %d %d\n", input.x1, input.y1, input.x2, input.y2);
+                        if (store_move(store, move_piece(game_board, &user_move, lower_turn), i, round) == 'K')
+                            quit = 1;
+                        i++;
+                        lower_turn = !lower_turn;
+
+                        input.x1 = input.x2 = input.y1 = input.y2 = -1;
+
+                        SDL_RenderClear(app->renderer);
+                        draw_board(game_board, app, piece_sprites);
+                        SDL_RenderPresent(app->renderer);
+
+                    }
+                    else {
+                        input.x1 = input.x2 = input.y1 = input.y2 = -1;
+                    }
+                } else {
+                    input.x1 = input.x2 = input.y1 = input.y2 = -1;
+                }
+
+            }
+
+            if (i % 2 == 1) {
 
                 Move mv = get_random_move(game_board, lower_turn);
-
-                //  print_board(game_board);
-
                 while (!verify_move(game_board, &mv) && attempts++ <= 4)
                     mv = get_random_move(game_board, lower_turn);
 
                 if (attempts >= 4) quit = 1;
+                SDL_Delay(500);
+                if (store_move(store, move_piece(game_board, &mv, lower_turn), i, round) == 'K')
+                    quit = 1;
 
-                store_move(store, move_piece(game_board, &mv, lower_turn), i, round);
-                //print_board(game_board);
-                SDL_Delay(10);
-                if ((i % 2) == 1) round++;
+                SDL_RenderClear(app->renderer);
+                draw_board(game_board, app, piece_sprites);
+                SDL_RenderPresent(app->renderer);
+
+
                 i++;
+
                 lower_turn = !lower_turn;
             }
+
         }
 
        
     }
     print_board(game_board);
-    fclose(store);
-    SDL_DestroyTexture(piece_sprites);
-    free_board(game_board);
-    close_app(app);
-    store = NULL;
-    game_board = NULL;
-    piece_sprites = NULL;
-    app = NULL;
-    
-    SDL_Quit();
+    quit = 0;
+    while (!quit) {
+
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                fclose(store);
+                SDL_DestroyTexture(piece_sprites);
+                free_board(game_board);
+                close_app(app);
+                store = NULL;
+                game_board = NULL;
+                piece_sprites = NULL;
+                app = NULL;
+
+                SDL_Quit();
+                quit = 1;
+            }
+
+        }
+    }
 
     return 0;
 }
