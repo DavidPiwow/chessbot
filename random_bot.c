@@ -7,8 +7,8 @@ static inline int choose_random(int i1, int i2) {
 }
 
 
-Coordinates get_ran_pos(Board *board, int up) {
-    Coordinates* positions = up ? board->upper_pieces : board->lower_pieces;
+Coordinates get_ran_pos(Board *board, int lower_turn) {
+    Coordinates* positions = lower_turn ? board->lower_pieces : board->upper_pieces;
     if (!positions) {
         printf("FAIL");
         return ((Coordinates) { EMPTY, EMPTY });
@@ -17,8 +17,8 @@ Coordinates get_ran_pos(Board *board, int up) {
     int x,y;
     int pos = rand() % (PIECE_COUNT);
     pos = pos > PIECE_COUNT ? PIECE_COUNT : pos;
-
-    while (positions[pos].x == EMPTY) pos = rand() % (PIECE_COUNT);
+    int attempts = 0;
+    while (positions[pos].x == EMPTY && (attempts++ <= 4) ) pos = rand() % (PIECE_COUNT);
     
     x = positions[pos].x;
     y = positions[pos].y;
@@ -67,12 +67,13 @@ Move get_random_pawn(Board *board, int x, int y)
     return mv;
 }
 
-Move get_random_move(Board *board, int up) {
-    Coordinates pos = get_ran_pos(board, up);
+Move get_random_move(Board *board, int lower_turn) {
+    Coordinates pos = get_ran_pos(board, lower_turn);
 
     MoveChoices choices = get_valid_moves(board, pos.x, pos.y);
-    while (!choices.any) {
-        pos = get_ran_pos(board, up);
+    int attempts = 0;
+    while (!choices.any || attempts++ >= 4) {
+        pos = get_ran_pos(board, lower_turn);
         choices = get_valid_moves(board, pos.x, pos.y);
     }
     char piece = get_piece_at(board, pos.x, pos.y);
@@ -102,7 +103,7 @@ Move get_random_move(Board *board, int up) {
             }
         }
         
-        pos = get_ran_pos(board, up);
+        pos = get_ran_pos(board, lower_turn);
         choices = get_valid_moves(board, pos.x, pos.y);
 
         piece = get_piece_at(board, pos.x, pos.y);

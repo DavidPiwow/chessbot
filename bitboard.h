@@ -8,8 +8,8 @@ typedef uint64_t BITBOARD;
 
 
 struct _board_state {
-    BITBOARD white;
-    BITBOARD black;
+    BITBOARD upper;
+    BITBOARD lower;
 };
 
 

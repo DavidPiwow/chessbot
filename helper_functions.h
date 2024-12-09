@@ -16,7 +16,7 @@ int correct_direction(Move* move, char piece);
 
 
 
-MoveHistory* move_piece(Board* board, Move* move);
+MoveHistory* move_piece(Board* board, Move* move, int lower_turn);
 char get_piece_at(Board* board, int x, int y);
 
 int piece_score(char piece);
@@ -35,7 +35,7 @@ MoveHistory* pop_history(MoveHistory* last);
 
 int get_piece_number(char piece);
 void free_history(MoveHistory* history);
-Coordinates* get_coordinates(Board* board, int up);
+Coordinates* get_coordinates(Board* board, int lower);
 
 
 #endif

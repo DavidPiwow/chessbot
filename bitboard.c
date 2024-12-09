@@ -83,13 +83,13 @@ inline static int has_piece(BITBOARD* board, Move* move) {
     return 0;
 }
 
-int piece_swap(BoardState* game_state, struct _move* move, int white_team) {
-    BITBOARD team_board = white_team ? game_state->white : game_state->black;
+int piece_swap(BoardState* game_state, struct _move* move, int lower_turn) {
+    BITBOARD team_board = lower_turn ? game_state->lower : game_state->upper;
     BITBOARD piece_location = make_mask(move->x1, move->y1);
 
     if (!(team_board & piece_location)) return 0;
 
-    BITBOARD enemy_board = white_team ? game_state->black : game_state->white;
+    BITBOARD enemy_board = lower_turn ? game_state->upper : game_state->lower;
 
     // remove the old location from the board
     team_board = team_board ^ piece_location;
@@ -105,24 +105,24 @@ int piece_swap(BoardState* game_state, struct _move* move, int white_team) {
     team_board = team_board | piece_location;
 
     // set the boards in the state
-    if (white_team) {
-        game_state->white = team_board;
-        game_state->black = enemy_board;
+    if (lower_turn) {
+        game_state->lower = team_board;
+        game_state->upper = enemy_board;
     }
     else {
-        game_state->white = enemy_board;
-        game_state->black = team_board;
+        game_state->lower = enemy_board;
+        game_state->upper = team_board;
     }
     return 1;
 }
 
-int attempt_move(BoardState* game_state, struct _move* move, int white_team) {
-    BITBOARD team_board = white_team ? game_state->white  : game_state->black;
+int attempt_move(BoardState* game_state, struct _move* move, int lower_turn) {
+    BITBOARD team_board = lower_turn ? game_state->lower  : game_state->upper;
     BITBOARD piece_location = make_mask(move->x1, move->y1);
 
     if (!(team_board & piece_location)) return 0;
 
-    BITBOARD enemy_board = white_team ? game_state->black : game_state->white;
+    BITBOARD enemy_board = lower_turn ? game_state->upper : game_state->lower;
 
     team_board = team_board ^ piece_location;
 

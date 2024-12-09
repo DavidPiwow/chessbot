@@ -125,14 +125,14 @@ Coordinates* find_piece(Coordinates* coords, int x, int y) {
     return NULL;
 }
 
-MoveHistory* move_piece(Board* board, Move* move) {
+MoveHistory* move_piece(Board* board, Move* move, int lower_turn) {
 
     char* old_pos = board->grid + move->x1 + (move->y1 * BOARD_SIZE);
     char* new_pos = board->grid + move->x2 + (move->y2 * BOARD_SIZE);
     char piece = get_piece_at(board, move->x1, move->y1);
 
-    Coordinates* piece_cache = isupper(piece) ? board->upper_pieces : board->lower_pieces;
-    Coordinates* enemy_cache = isupper(piece) ? board->lower_pieces : board->upper_pieces;
+    Coordinates* piece_cache = lower_turn ? board->lower_pieces : board->upper_pieces;
+    Coordinates* enemy_cache = lower_turn ? board->upper_pieces : board->lower_pieces;
 
     piece_cache = find_piece(piece_cache, move->x1, move->y1);
 
@@ -207,7 +207,7 @@ int num_from_char(char c) {
     return EMPTY;
 }
 
-Coordinates* get_coordinates(Board* board, int up) {
+Coordinates* get_coordinates(Board* board, int lower_turn) {
     Coordinates *positions = malloc(sizeof(Coordinates) * 17);
     if (!positions) {
         printf("FAIL");
@@ -227,7 +227,7 @@ Coordinates* get_coordinates(Board* board, int up) {
             if (piece == EMPTY) 
                 continue;
 
-            if ((up && !isupper(piece)) || (!up && !islower(piece)))
+            if ((lower_turn && !islower(piece)) || (!lower_turn && !isupper(piece)))
                 continue;
 
             positions[pos_count] = (Coordinates){x, y};

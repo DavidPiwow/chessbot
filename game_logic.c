@@ -30,11 +30,11 @@ Board* create_board(void) {
     temp->state = (BoardState*)malloc(sizeof(BoardState));
 
     if (temp->state) {
-        temp->state->white = white_pieces;
-        temp->state->black = black_pieces;
+        temp->state->lower = white_pieces;
+        temp->state->upper = black_pieces;
     }
-    temp->lower_pieces = get_coordinates(temp, 0);
-    temp->upper_pieces = get_coordinates(temp, 1);
+    temp->lower_pieces = get_coordinates(temp, 1);
+    temp->upper_pieces = get_coordinates(temp, 0);
     return temp;
 }
 
