@@ -13,7 +13,7 @@ int main(int argc, char* args[])
     srand((unsigned int)time(NULL)); 
     
     Board* game_board = create_board();
-    FILE* store = fopen("C:\\Users\\david\\source\\repos\\chessupdate\\chess_history.txt","w");
+    FILE* store = fopen("chess_history.txt","w");
 
     if (!game_board || !store) return 0;
     
@@ -28,6 +28,8 @@ int main(int argc, char* args[])
     int attempts = 0;
     int round = 1;
 
+
+    SDL_SetRenderDrawColor(app->renderer, 0,0,0, 255);
     int lower_turn = 1;
     while (!quit && round <= 30){
         SDL_RenderClear(app->renderer);
@@ -40,12 +42,12 @@ int main(int argc, char* args[])
                 quit = 1;
             }
             if (e.type == SDL_KEYDOWN){
+
                 SDL_RenderClear(app->renderer);
                 draw_board(game_board, app, piece_sprites);
                 //SDL_RenderDrawRect(app->renderer, &r);
 
                 SDL_RenderPresent(app->renderer);
-                SDL_SetRenderDrawColor(app->renderer, 15, 4, 26, 255);
 
                 Move mv = get_random_move(game_board, lower_turn);
 

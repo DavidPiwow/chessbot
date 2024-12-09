@@ -1,0 +1,13 @@
+1. Pg4 Pc5
+2. Pe3 Pb6
+3. Pe4 Nc6
+4. Pb4 Pxb4
+5. Pb3 Pd6
+6. Pg5 Qd7
+7. Pd4 Pb5
+8. Bxb5 Qb7
+9. Qd3 Rb8
+10. Pe5 Kd8
+11. Pg6 Ke8
+12. Pxf7 Pg6
+13. Qd2 Bh3
