@@ -1,11 +1,11 @@
 #include "display.h"
 #include "helper_functions.h"
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <string.h>
 // 45 pixels for the piece sprites!!
 #define IMAGE_SIZE 45
 
-#define IMAGELINK "C:\\Users\\david\\source\\repos\\chessupdate\\chess_pieces.png"
+#define IMAGELINK "/home/david/Desktop/cgame/chess_pieces.png"
 
 App* open_app(int size_x, int size_y) {
 	App* app = calloc(1, sizeof(App));

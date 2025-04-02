@@ -1,5 +1,5 @@
 #include "game_logic.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #define IMAGE_PATH "C:\NEWCHESS\chess_pieces.png"
 
